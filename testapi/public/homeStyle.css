@@ -1,0 +1,12 @@
+body {
+  background-color: rgb(80, 80, 231);
+}
+
+.email-container {
+  max-width: 60rem;
+  min-height: 25rem;
+  padding: 2rem;
+  background-color: lightblue;
+  margin: auto;
+  margin-top: 5rem;
+}

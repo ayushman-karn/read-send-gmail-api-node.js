@@ -1,7 +1,90 @@
 const fs = require("fs");
 const readline = require("readline");
 const { google } = require("googleapis");
+const express = require("express");
+
+const app = express();
 require("dotenv").config();
+
+app.listen(3000, () => {
+  console.log("listening on port 3000");
+});
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static("public"));
+
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+  fs.readFile("credentials.json", (err, content) => {
+    if (err) return console.log("Error loading client secret file:", err);
+    //Authorize a client with credentials, then call the Gmail API.
+    authorize(JSON.parse(content), (auth) => {
+      const gmail = google.gmail("v1");
+      gmail.users.messages.list(
+        {
+          auth: auth,
+          userId: "me",
+          maxResults: 3,
+          q: "",
+        },
+        (err, response) => {
+          messageID = response.data.messages;
+          let mails = "";
+          gmail.users.messages.get(
+            {
+              auth: auth,
+              userId: "me",
+              id: messageID[0].id,
+            },
+            (err, response) => {
+              console.log(typeof response.data.snippet, response.data.snippet);
+              mails += response.data.snippet;
+              console.log(mails);
+              console.log("rendering..");
+              res.render("home", { mails });
+            }
+          );
+        }
+      );
+    });
+  });
+});
+
+app.get("/contact", (req, res) => {
+  res.render("contact");
+});
+
+app.post("/contact", (req, res) => {
+  fs.readFile("credentials.json", (err, content) => {
+    if (err) return console.log("Error loading client secret file:", err);
+    // Authorize a client with credentials, then call the Gmail API.
+    authorize(JSON.parse(content), (auth) => {
+      const gmail = google.gmail("v1");
+      const raw = makeBody(
+        process.env.to,
+        process.env.from,
+        "test subject",
+        req.body.firstname + " " + req.body.lastname + " - " + req.body.email
+      );
+      gmail.users.messages.send(
+        {
+          auth: auth,
+          userId: "me",
+          resource: {
+            raw: raw,
+          },
+        },
+        (err, res) => {
+          if (err) console.log(err);
+        }
+      );
+    });
+  });
+  res.redirect("/");
+  console.log("Email sent!");
+});
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/gmail.modify"];
@@ -11,13 +94,13 @@ const SCOPES = ["https://www.googleapis.com/auth/gmail.modify"];
 const TOKEN_PATH = "token.json";
 
 // Load client secrets from a local file.
-fs.readFile("credentials.json", (err, content) => {
-  if (err) return console.log("Error loading client secret file:", err);
-  // Authorize a client with credentials, then call the Gmail API.
-  authorize(JSON.parse(content), listLabels); //List outs all the lables
-  authorize(JSON.parse(content), findMessages); //list out the emails in the account
-  authorize(JSON.parse(content), sendMessage); //sends a email
-});
+// fs.readFile("credentials.json", (err, content) => {
+//   if (err) return console.log("Error loading client secret file:", err);
+//   //Authorize a client with credentials, then call the Gmail API.
+//   authorize(JSON.parse(content), listLabels); //List outs all the labels
+//   authorize(JSON.parse(content), findMessages); //list out the emails in the account
+//   authorize(JSON.parse(content), sendMessage); //sends a email
+// });
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
