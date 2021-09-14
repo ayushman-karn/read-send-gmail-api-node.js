@@ -1,13 +1,11 @@
 {
-  "name": "testapi",
+  "name": "testapi2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "googleapis": "^39.2.0"
+    "googleapis": "^85.0.0"
   },
   "devDependencies": {},
   "scripts": {

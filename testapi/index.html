@@ -1,0 +1,74 @@
+<html itemscope itemtype="http://schema.org/Article">
+  <head>
+    <!-- BEGIN Pre-requisites -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script
+      src="https://apis.google.com/js/client:platform.js?onload=start"
+      async
+      defer
+    ></script>
+    <script>
+      function start() {
+        gapi.load("auth2", function () {
+          auth2 = gapi.auth2.init({
+            client_id: "client_id",
+            // Scopes to request in addition to 'profile' and 'email'
+            scope: "https://www.googleapis.com/auth/gmail.modify",
+          });
+        });
+      }
+    </script>
+  </head>
+  <body
+    style="
+      background-color: rgb(80, 80, 231);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <button
+      id="signinButton"
+      style="
+        background-color: #04aa6d;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20%;
+        font-weight: bolder;
+      "
+    >
+      Sign in with Google
+    </button>
+    <script>
+      $("#signinButton").click(function () {
+        // signInCallback defined in step 6.
+        auth2.grantOfflineAccess().then(signInCallback);
+      });
+    </script>
+    <script>
+      async function signInCallback(authResult) {
+        if (authResult["code"]) {
+          // Hide the sign-in button now that the user is authorized, for example:
+          $("#signinButton").attr("style", "display: none");
+          console.log(authResult["code"]);
+          data = { authCode: authResult["code"] };
+          const options = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          };
+          // Send the code to the server
+          await fetch("/", options);
+          location.assign("/send");
+        } else {
+          console.error("Error!");
+        }
+      }
+    </script>
+  </body>
+</html>

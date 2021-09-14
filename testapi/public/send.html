@@ -1,0 +1,44 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./sendStyle.css" />
+    <title>send</title>
+  </head>
+  <body>
+    <ul class="nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/send">Send Email</a></li>
+    </ul>
+    <div class="container">
+      <form action="/send" method="POST">
+        <label for="Semail">Senders Email</label>
+        <input
+          type="email"
+          id="Semail"
+          name="Semail"
+          placeholder="Enter Senders Email.."
+        />
+
+        <label for="Remail">Receivers Email</label>
+        <input
+          type="email"
+          id="Remail"
+          name="Remail"
+          placeholder="Enter Receivers Email.."
+        />
+        <label for="email">Message</label>
+        <textarea
+          id="email"
+          name="email"
+          placeholder="Your Message.."
+          style="height: 200px"
+        ></textarea>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

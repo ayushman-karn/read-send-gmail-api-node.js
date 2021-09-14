@@ -1,14 +1,13 @@
-## Gmail API Implementation In Node.js 
-## View Email Page
-![screen shot](SS/ss1.png)
+## Gmail API Implementation Using Google SignIn Library In Node.js 
+## SignIn With Google Page
+![screen shot](SS/ss3.png)
 ## Send Email Page
-![screen shot](SS/ss2.png)
+![screen shot](SS/ss4.png)
 
 ### Built With
 
 * node.js
 * express.js
-* ejs
 * gmail api
 * HTML5
 * CSS3
@@ -16,6 +15,6 @@
 
 ## Functionality
 
+* Contains google signin library.
 * Contains a form to send emails.
-* Displays most recent email.
 * Contains navigation bar.
